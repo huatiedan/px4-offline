@@ -1,0 +1,27 @@
+
+name: Package PX4 for Offline Use
+
+on:
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout PX4 with submodules
+        uses: actions/checkout@v4
+        with:
+          repository: PX4/PX4-Autopilot
+          ref: v1.13.3
+          submodules: recursive
+          fetch-depth: 1
+          path: PX4-Autopilot
+
+      - name: Create archive
+        run: tar -czf px4-v1.13.3-full.tar.gz PX4-Autopilot
+
+      - name: Upload archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: px4-v1.13.3-full
+          path: px4-v1.13.3-full.tar.gz
